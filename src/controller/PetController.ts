@@ -1,5 +1,6 @@
 import e, { Request, Response } from "express";
 import TipoPet from "../tipos/TipoPet";
+import PetRepository from "../repositories/PetRepository";
 
 let listaDePets: Array<TipoPet> = [];
 
@@ -10,6 +11,9 @@ function geraId() {
 }
 
 export default class PetController{
+    constructor(private repository: PetRepository) {}
+
+
     criaPet(req:Request, res:Response){
         const {id,adotado,especie,dataDeNascimento,nome} = <TipoPet>req.body;
         
@@ -17,7 +21,7 @@ export default class PetController{
         return res.status (400).json({ error: "Especie inválida" });
         }
         const novoPet:TipoPet = {id: geraId() ,adotado,especie,dataDeNascimento,nome};
-        listaDePets.push(novoPet)
+        this.repository.criaPet(novoPet)
         return res.status(201).json(novoPet)    
     }
 
