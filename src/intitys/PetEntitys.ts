@@ -1,15 +1,16 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { EnumEspecie } from "../enum/EnumEspecie";
 
 @Entity()
 export default class PetEntity {
     @PrimaryGeneratedColumn()
-    id:number;
+    id?:number;
     @Column()
-    nome:string;
+    nome?:string;
     @Column()
-    especie:string;
+    especie?:EnumEspecie;
     @Column()
-    dataDeNascimento:Date;
+    dataDeNascimento?:Date;
     @Column()
-    adotado:boolean;
+    adotado?:boolean;
 }
