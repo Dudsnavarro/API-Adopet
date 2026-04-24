@@ -33,34 +33,33 @@ criaPet(req: Request, res: Response) {
     return res.status(201).json(novoPet);
 }
 
-listaPets (req: Request, res: Response) {
-return res.status (200).json (listaDePets);
+async listaPets (req: Request, res: Response) {
+    const listaDePets = await this.repository.listaPet();
+    return res.status(200).json(listaDePets);
 }
 
-atualizaPet (req: Request, res: Response) {
-const { id } = req.params;
-const { adotado, especie, dataDeNascimento, nome} = req.body as TipoPet;
-const pet = listaDePets.find((pet) => pet.id === Number(id));
-if (!pet) { 
-return res.status (404).json({ erro: "Pet não encontrado" });
+async atualizaPet (req: Request, res: Response) {
+    const { id } = req.params
+    const {sucess, message} = await this.repository.atualizaPet(
+        Number(id),
+        req.body as PetEntity
+    );
+
+    if (!sucess){
+        return res.status(400).json({ message })
+    }
+    return res.sendStatus(204)
 }
 
-pet.nome = nome;
-pet.dataDeNascimento = dataDeNascimento;
-pet.especie = especie;
-pet.adotado = adotado;
-return res.status (200).json (pet);
-}
+  async deletaPet(req: Request, res: Response) {
+    const { id } = req.params;
 
-deletaPet (req: Request, res: Response) {
-const { id } = req.params;
-const pet = listaDePets.find((pet) => pet.id === Number(id)); 
-if (!pet) {
-return res.status (404).json({ erro: "Pet não encontrado" }); 
-}
-const index = listaDePets.indexOf(pet);
-listaDePets.splice (index, 1);
-return res.status(200).json({ mensagem: "Pet deletado com sucesso" });
-}
+    const { success, message } = await this.repository.deletaPet(Number(id));
+
+    if (!success) {
+      return res.status(404).json({ message });
+    }
+    return res.sendStatus(204);
+  }
 
 }
