@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import InterfaceAdotanteReposotory from "./interface/InterfaceAdotanteReposotory";
-import AdotanteEntity from "../intitys/AdotanteEntitys";
+import EnderecoEntity from "../entitys/EnderecoEntitys";
+import AdotanteEntity from "../entitys/AdotanteEntitys";
 
 export default class AdotanteRepository implements InterfaceAdotanteReposotory {
   constructor(private repository: Repository<AdotanteEntity>) {}
@@ -57,4 +58,22 @@ export default class AdotanteRepository implements InterfaceAdotanteReposotory {
       };
     }
   }
+
+async atualizaEnderecoAdotante(
+  idAdotante: number,
+  endereco: EnderecoEntity
+): Promise<{ success: boolean; message?: string }> {
+  const adotante = await this.repository.findOne({
+    where: { id: idAdotante },
+  });
+
+  if (!adotante) {
+    return { success: false, message: "Adotante não encontrado" };
+  }
+
+  const novoEndereco=new EnderecoEntity(endereco.cidade, endereco.estado);
+  adotante.endereco = novoEndereco
+  await this.repository.save(adotante)
+  return {success: true}
+}
 }

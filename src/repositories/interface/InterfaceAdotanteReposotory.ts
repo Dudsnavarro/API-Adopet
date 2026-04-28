@@ -1,4 +1,6 @@
-import AdotanteEntity from "../../intitys/AdotanteEntitys";
+import AdotanteEntity from "../../entitys/AdotanteEntitys";
+import EnderecoEntity from "../../entitys/EnderecoEntitys";
+
 
 export default interface InterfaceAdotanteRepository {
 criaAdotante(adotante: AdotanteEntity): void | Promise<void>;
@@ -13,4 +15,11 @@ adotante: AdotanteEntity
 deletaAdotante(
 id: number
 ): Promise<{ success: boolean; message?: string }> | void;
+
+atualizaEnderecoAdotante(
+  idAdotante: number,
+  endereco: EnderecoEntity
+): Promise<{ success: boolean; message?: string }> | void;
+
 }
+
